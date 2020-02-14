@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 
-function Example() {
-    let [count, setCount] = useState(10);
-    const [todos, setTodos] = useState(["learn hooks"]);
+const initialState = {count: 0};
 
-    
-
-    return (
-        <div>
-            <p>You clicked {count} times.</p>
-            <button onClick={() => setCount(count+1)}>
-                Click me
-            </button>
-            <button onClick={() => setCount(count = 0)}>
-                Reset counter
-            </button>
-            <ul>
-                {todos.map((task, index) => (
-                    <li key={index}>
-                        {task}
-                    </li>
-                ))}
-            </ul>
-            <input onChange={e => setTodos([...todos, e.target.value])}/>
-        </div>
-    )
+function reducer(state, action) {
+    switch(action.type) {
+        case 'increment':
+            return {count: state.count + 1};
+        case 'decrement':
+            return {count: state.count - 1};
+        default:
+            throw new Error();
+    }
 }
 
-export default Example;
+function Counter() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    return (
+        <>
+        Count: {state.count}
+        <br/>
+        <button onClick={() => dispatch({ type: "decrement" })}>
+            -
+        </button>
+        <button onClick={() => dispatch({ type: "increment" })}>
+            +
+        </button>
+        </>
+    );
+    
+}
+
+export default Counter;
